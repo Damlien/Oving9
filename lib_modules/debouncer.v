@@ -3,7 +3,7 @@
 Task:       D-100.6 prerequisite 
 File:       lib_module/debouncer
 Module:     debouncer
-Purpose:    a debouncer for buttons on FPGA board
+Purpose:    a debouncer for buttons
 Depends:    -
 =============================================================
 */

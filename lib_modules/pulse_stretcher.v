@@ -10,10 +10,6 @@ Depends:    -
 =============================================================
 */
 
-
-
-
-
 module pulse_prolonger #(
 
     parameter MAX_TIMER = 12_500_000) 
