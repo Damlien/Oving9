@@ -1,0 +1,12 @@
+# Python venv
+venv/
+
+# Apio build artifacts
+_build/
+
+# GTKWave state files (optional, keep if you want)
+*.gtkw
+
+# Backup files
+*.bak
+backup/
