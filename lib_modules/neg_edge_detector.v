@@ -3,7 +3,7 @@
 Task:       D-100.6 b
 File:       lib_module/neg_edge_detector.v
 Module:     neg_edge_detector
-Purpose:    detects when a button either has neg edge
+Purpose:    detects when a button has falling edge
 Depends:    lib_module/D_vippe.v
 =============================================================
 */

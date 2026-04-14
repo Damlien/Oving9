@@ -3,7 +3,7 @@
 Task:       D-100.6 a 
 File:       lib_module/pos_edge_detector.v
 Module:     pos_edge_detector
-Purpose:    detects when a button has positive edge
+Purpose:    detects when a button has rising edge
 Depends:    lib_module/D_vippe.v
 =============================================================
 */

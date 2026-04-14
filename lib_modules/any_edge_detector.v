@@ -3,8 +3,8 @@
 Task:       D-100.6 c 
 File:       lib_module/any_edge_detector.v
 Module:     any_edge_detector
-Purpose:    detects when a button either has positive edge or 
-            negative edge
+Purpose:    detects when a button either has rising edge or 
+            falling edge
 Depends:    lib_module/D_vippe.v
 =============================================================
 */
