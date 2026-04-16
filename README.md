@@ -17,12 +17,15 @@ Oving9/
 │   ├── neg_edge_detector.v
 │   ├── any_edge_detector.v
 │   ├── simple_prescaler.v
-│   └── pulse_stretcher.v
+│   ├── pulse_stretcher.v
+│   └── seven_segment_display_0_F.v
 ├── testbenching/         # Testbenches and GTKWave files
 ├── D_100_6_edge_detector_test.v
 ├── D_100_7_a_SR_latch_with_ctrl.v
 ├── D_100_7_b_SR_latch_blinking.v
 ├── D_100_8_display_zero_to_F.v
+├── D_100_9_counter_4_1.v
+├── D_100_10_counter_up_down.v
 ├── Go_Board_Constraints.pcf
 └── apio.ini
 ```
@@ -70,6 +73,40 @@ Combinational decoder displaying hexadecimal digits 0–F on a 7-segment display
 
 ---
 
+### D-100.9 – Down Counter 4→1
+
+**File:** `D_100_9_counter_4_1.v`
+
+Sequential counter that cycles through 4 → 3 → 2 → 1 → 4 … on each press of SW1. The current value is shown on the 7-segment display.
+
+- SW1 is debounced and a positive edge detector converts each button press into a single-cycle clock pulse for the flip-flops.
+- State is held in three D flip-flops (D2, D1, D0). D3 is hardwired to 0 since the count range fits in 3 bits (binary 001–100).
+- D2 initializes to 1 so the counter starts at 4 (binary `100`).
+- Next-state logic (derived from Karnaugh maps):
+  - `D2_next = D0 & ~D1 & ~D2`
+  - `D1_next = (D0 & D1 & ~D2) | (~D0 & ~D1 & D2)`
+  - `D0_next = (~D0 & D1 & ~D2) | (~D0 & ~D1 & D2)`
+- Output fed directly into `seven_segment_display_0_F` (reused from D-100.8).
+
+---
+
+### D-100.10 – Up/Down Counter 1↔4
+
+**File:** `D_100_10_counter_up_down.v`
+
+Bidirectional counter over the sequence {1, 2, 3, 4, 1, …}. SW2 counts up; SW1 counts down. The current value is shown on the 7-segment display.
+
+- Both buttons are independently debounced and passed through positive edge detectors.
+- The clock for all D flip-flops is `pos_SW1 | pos_SW2`, so any button press advances the state.
+- Direction is controlled by `X = clean_SW2` (held high while SW2 is pressed when the edge fires).
+- Next-state logic (derived from Karnaugh maps for count-up when X=1, count-down when X=0):
+  - `D2_next = (D0 & D1 & ~D2 & X) | (D0 & ~D1 & ~D2 & ~X)`
+  - `D1_next = (D0 & D1 & ~D2 & ~X) | (~D0 & ~D1 & D2 & ~X) | (D0 & ~D1 & ~D2 & X) | (~D0 & D1 & ~D2 & X)`
+  - `D0_next = (~D0 & ~D1 & D2 & ~X) | (~D0 & ~D1 & D2 & X) | (~D0 & D1 & ~D2 & ~X) | (~D0 & D1 & ~D2 & X)`
+- Output fed directly into `seven_segment_display_0_F`.
+
+---
+
 ## Reusable Library Modules
 
 | Module | Description |
@@ -82,6 +119,7 @@ Combinational decoder displaying hexadecimal digits 0–F on a 7-segment display
 | `any_edge_detector` | Detects either edge of a signal |
 | `simple_prescaler` | Generates slow (~0.5 Hz) and fast (~3 Hz) blink signals from 12 MHz clock |
 | `pulse_stretcher` | Extends a short pulse to a configurable duration (default: ~1 second) |
+| `seven_segment_display_0_F` | Combinational 7-segment decoder for hex digits 0–F (reusable wrapper around D-100.8 logic) |
 
 ---
 
