@@ -10,10 +10,10 @@ Depends:    -
 
 
 
-module D_vippe (
+module D_vippe #(parameter INIT = 1'b0) (
     input D, clk,
-    output reg Q = 1'b0, 
-    output reg Qn = 1'b0
+    output reg Q = INIT, 
+    output reg Qn = INIT
     //  reg (variable som kan huske verdi)
     // 1'b0 (ett bit satt til 0)
 );
