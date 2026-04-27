@@ -26,6 +26,7 @@ Oving9/
 ├── D_100_8_display_zero_to_F.v
 ├── D_100_9_counter_4_1.v
 ├── D_100_10_counter_up_down.v
+├── D_100_11_Letter_count_up_down.v
 ├── Go_Board_Constraints.pcf
 └── apio.ini
 ```
@@ -104,6 +105,26 @@ Bidirectional counter over the sequence {1, 2, 3, 4, 1, …}. SW2 counts up; SW1
   - `D1_next = (D0 & D1 & ~D2 & ~X) | (~D0 & ~D1 & D2 & ~X) | (D0 & ~D1 & ~D2 & X) | (~D0 & D1 & ~D2 & X)`
   - `D0_next = (~D0 & ~D1 & D2 & ~X) | (~D0 & ~D1 & D2 & X) | (~D0 & D1 & ~D2 & ~X) | (~D0 & D1 & ~D2 & X)`
 - Output fed directly into `seven_segment_display_0_F`.
+
+---
+
+### D-100.11 – Letter Up/Down Counter A↔F
+
+**File:** `D_100_11_Letter_count_up_down.v`
+
+Bidirectional counter over the hexadecimal letter sequence {A, B, C, D, E, F}. SW2 counts up; SW1 counts down. The current letter is shown on the 7-segment display.
+
+- Both SW1 and SW2 are debounced and passed through positive edge detectors.
+- The clock for all D flip-flops is `pos_SW1 | pos_SW2`, so a press on either button advances the counter by one step.
+- Direction is controlled by `X = clean_SW2`. When SW2 is pressed, `X=1` and the counter follows the count-up path. When SW1 is pressed, `X=0` and the counter follows the count-down path.
+- D3 is hardwired to 1 because hexadecimal A–F all have the most significant bit set.
+- State is held in three D flip-flops (D2, D1, D0), representing the lower three bits of the displayed hex value.
+- D1 initializes to 1, so the counter starts at A (`1010`).
+- Next-state logic:
+  - `D2_next = (~D0 & D1 & D2) | (~D0 & D1 & X) | (D0 & D2 & X) | (~D1 & D2 & ~X) | (D0 & D1 & ~D2 & ~X)`
+  - `D1_next = (~D0 & D1 & ~X) | (D0 & D1 & D2) | (D1 & ~D2 & X) | (D0 & D2 & ~X) | (~D0 & ~D1 & D2 & X)`
+  - `D0_next = (~D0 & D1) | (~D0 & D2)`
+- Output is fed directly into `seven_segment_display_0_F`, reusing the hexadecimal display decoder from D-100.8.
 
 ---
 
