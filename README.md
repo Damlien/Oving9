@@ -16,6 +16,8 @@ Oving9/
 │   ├── pos_edge_detector.v
 │   ├── neg_edge_detector.v
 │   ├── any_edge_detector.v
+│   ├── add_3.v
+│   ├── c_add_3_alogrithm.v
 │   ├── simple_prescaler.v
 │   ├── pulse_stretcher.v
 │   └── seven_segment_display_0_F.v
@@ -27,6 +29,7 @@ Oving9/
 ├── D_100_9_counter_4_1.v
 ├── D_100_10_counter_up_down.v
 ├── D_100_11_Letter_count_up_down.v
+├── D_100_12_counter_99.v
 ├── Go_Board_Constraints.pcf
 └── apio.ini
 ```
@@ -128,6 +131,21 @@ Bidirectional counter over the hexadecimal letter sequence {A, B, C, D, E, F}. S
 
 ---
 
+### D-100.12 – Counter 0→99
+
+**Files:** `D_100_12_counter_99.v`, `lib_modules/add_3.v`, `lib_modules/c_add_3_alogrithm.v`
+
+Sequential counter that counts from 0 to 99 on each press of SW1. The value is shown as two decimal digits using both 7-segment displays.
+
+- SW1 is debounced and passed through a positive edge detector, so each button press advances the counter once.
+- The count is stored as a 7-bit binary register, which is enough for values 0–99 (`99 = 7'b1100011`).
+- When the counter reaches 99, the next button press wraps it back to 0. Otherwise, the counter increments by 1.
+- The 7-bit counter value is extended to 8 bits with a leading zero and sent into `c_add_3_algorithm`.
+- `c_add_3_algorithm` converts the binary value into BCD using seven `add_3` correction blocks.
+- The ones digit (`OUT[3:0]`) is sent to the right 7-segment display, and the tens digit (`OUT[7:4]`) is sent to the left 7-segment display.
+
+---
+
 ## Reusable Library Modules
 
 | Module | Description |
@@ -138,6 +156,8 @@ Bidirectional counter over the hexadecimal letter sequence {A, B, C, D, E, F}. S
 | `pos_edge_detector` | Detects rising edge of a signal |
 | `neg_edge_detector` | Detects falling edge of a signal |
 | `any_edge_detector` | Detects either edge of a signal |
+| `add_3` | C-add-3 correction block for a 4-bit group |
+| `c_add_3_algorithm` | Converts an 8-bit binary value to BCD using seven `add_3` blocks |
 | `simple_prescaler` | Generates slow (~0.5 Hz) and fast (~3 Hz) blink signals from 12 MHz clock |
 | `pulse_stretcher` | Extends a short pulse to a configurable duration (default: ~1 second) |
 | `seven_segment_display_0_F` | Combinational 7-segment decoder for hex digits 0–F (reusable wrapper around D-100.8 logic) |
@@ -161,4 +181,4 @@ apio sim      # Run simulation (requires testbench)
 - **Board:** Nandland Go Board (Lattice iCE40 HX1K)
 - **Clock:** 25 MHz onboard oscillator
 - **Inputs used:** SW1, SW2, SW3, SW4
-- **Outputs used:** LED1, LED2, LED3, Segment1 (7-segment display)
+- **Outputs used:** LED1, LED2, LED3, Segment1, Segment2 (7-segment displays)
