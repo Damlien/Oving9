@@ -140,9 +140,13 @@ Sequential counter that counts from 0 to 99 on each press of SW1. The value is s
 - SW1 is debounced and passed through a positive edge detector, so each button press advances the counter once.
 - The count is stored as a 7-bit binary register, which is enough for values 0–99 (`99 = 7'b1100011`).
 - When the counter reaches 99, the next button press wraps it back to 0. Otherwise, the counter increments by 1.
-- The 7-bit counter value is extended to 8 bits with a leading zero and sent into `c_add_3_algorithm`.
-- `c_add_3_algorithm` converts the binary value into BCD using seven `add_3` correction blocks.
-- The ones digit (`OUT[3:0]`) is sent to the right 7-segment display, and the tens digit (`OUT[7:4]`) is sent to the left 7-segment display.
+- The counter value is stored as ordinary binary, but the two displays need separate decimal digits. For example, decimal 45 is `0101101` as one binary number, but the displays need `0100` for 4 and `0101` for 5.
+- BCD solves this by storing each decimal digit in its own 4-bit group. The converter therefore has to turn one binary number into two BCD groups: one for the 1s digit and one for the 10s digit.
+- `c_add_3_algorithm` is a combinational binary-to-BCD converter. It does not store or count; whenever the binary input changes, the BCD output changes from the wiring through the converter.
+- The converter is based on shifting the binary bits into the future BCD digit groups. A left shift is the same as multiplying by 2, so the partial BCD groups must stay valid after each shift.
+- `add_3` is the correction block used before a shift. If a 4-bit group is 5 or greater, the next left shift would make that digit become 10 or greater, which cannot fit inside one BCD digit. Adding 3 before the shift makes the carry move into the next BCD group instead.
+- The seven `add_3` instances in `c_add_3_algorithm` are a fixed, unrolled version of this shift-and-correct process for an 8-bit input. The counter only needs 7 bits for 0–99, so it is connected with a leading zero.
+- The converter output is split into two BCD digits: `OUT[3:0]` is the 1s digit and goes to the right 7-segment display, while `OUT[7:4]` is the 10s digit and goes to the left 7-segment display.
 
 ---
 
