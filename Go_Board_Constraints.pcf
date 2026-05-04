@@ -60,12 +60,24 @@ set_io o_VGA_Blu_0 28
 set_io o_VGA_Blu_1 41
 set_io o_VGA_Blu_2 42
 
-## PMOD Signals
-set_io io_PMOD_1 65
-set_io io_PMOD_2 64
-set_io io_PMOD_3 63
-set_io io_PMOD_4 62
-set_io io_PMOD_7 78
-set_io io_PMOD_8 79
-set_io io_PMOD_9 80
-set_io io_PMOD_10 81
+########## PMOD connector ################################################
+#
+#      Pmod           FPGA-pins
+#
+#     ########       ##########  
+#    | 1   7 |     >| 65    78 | 
+#    | 2   8 |      | 64    79 | 
+#    | 3   9 |      | 63    80 | 
+#    | 4  10 |      | 62    81 | 
+#    | 5  11 |      | GND  GND | 
+#    | 6  12 |      | 3v3  3v3 | 
+#     ########       ##########  
+set_io -nowarn PMOD1   65
+set_io -nowarn PMOD2   64
+set_io -nowarn PMOD3   63
+set_io -nowarn PMOD4   62
+set_io -nowarn PMOD7   78
+set_io -nowarn PMOD8   79
+set_io -nowarn PMOD9   80
+set_io -nowarn PMOD10  81
+

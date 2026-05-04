@@ -18,6 +18,7 @@ Oving9/
 │   ├── any_edge_detector.v
 │   ├── add_3.v
 │   ├── c_add_3_alogrithm.v
+│   ├── Repeated_sequentially_counter_1_6.v
 │   ├── simple_prescaler.v
 │   ├── pulse_stretcher.v
 │   └── seven_segment_display_0_F.v
@@ -30,6 +31,8 @@ Oving9/
 ├── D_100_10_counter_up_down.v
 ├── D_100_11_Letter_count_up_down.v
 ├── D_100_12_counter_99.v
+├── D_100_16_Numbergenerator_counter_1_6.v
+├── D_100_17_number_to_dice_decoder.v
 ├── Go_Board_Constraints.pcf
 └── apio.ini
 ```
@@ -151,6 +154,60 @@ Sequential counter that counts from 0 to 99 on each press of SW1. The value is s
 
 ---
 
+### D-100.16 – Repeating Number Generator 1→6
+
+**Files:** `D_100_16_Numbergenerator_counter_1_6.v`, `lib_modules/Repeated_sequentially_counter_1_6.v`
+
+Sequential number generator for the electronic dice task. It repeatedly counts through the sequence {1, 2, 3, 4, 5, 6} while SW1 is held down.
+
+- `SW1` is debounced before it controls the counter, so the generator responds to a stable button signal.
+- The reusable module `Repeated_sequentially_counter_1_6` receives `clean_button` and `clk`.
+- When `clean_button=1`, an internal clock-cycle counter runs. When it reaches `12_000_000`, the displayed state advances to the next number.
+- When `clean_button=0`, the generator stops and holds the current value.
+- The current dice number is stored as a 3-bit state `D_now[2:0]`, using binary values `001` through `110`.
+- `D_100_16_Numbergenerator_counter_1_6.v` is a test/top-level version that connects the generated number to `seven_segment_display_0_F`.
+
+---
+
+### D-100.17 – Dice LED Decoder
+
+**File:** `D_100_17_number_to_dice_decoder.v`
+
+Combinational decoder for a physical dice display with seven LED positions. The decoder receives the 3-bit number from the D-100.16 generator and drives the PMOD pins connected to the dice PCB.
+
+- LED position mapping:
+  - `L0` top left → `PMOD1`
+  - `L1` middle left → `PMOD2`
+  - `L2` bottom left → `PMOD3`
+  - `L3` center → `PMOD4`
+  - `L4` top right → `PMOD7`
+  - `L5` middle right → `PMOD8`
+  - `L6` bottom right → `PMOD9`
+- Decoder equations:
+  - `L0 = D2`
+  - `L1 = D1 & D2`
+  - `L2 = D1 | D2`
+  - `L3 = D0`
+  - `L4 = D1 | D2`
+  - `L5 = D1 & D2`
+  - `L6 = D2`
+- These equations produce the standard dice faces for inputs `001` to `110`.
+
+---
+
+### D-100.18 – Complete Electronic Dice
+
+**File:** `D_100_17_number_to_dice_decoder.v`
+
+The complete electronic dice system is assembled in the same top-level file as D-100.17.
+
+- The top-level data path is: `SW1` → `debouncer` → `Repeated_sequentially_counter_1_6` → dice decoder → `PMOD1`, `PMOD2`, `PMOD3`, `PMOD4`, `PMOD7`, `PMOD8`, `PMOD9`.
+- Holding SW1 down makes the number generator cycle through the dice values.
+- Releasing SW1 stops the generator, leaving the current dice face visible on the external LED dice module.
+- The active top module in `apio.ini` is `number_to_dice_decoder`.
+
+---
+
 ## Reusable Library Modules
 
 | Module | Description |
@@ -163,6 +220,7 @@ Sequential counter that counts from 0 to 99 on each press of SW1. The value is s
 | `any_edge_detector` | Detects either edge of a signal |
 | `add_3` | C-add-3 correction block for a 4-bit group |
 | `c_add_3_algorithm` | Converts an 8-bit binary value to BCD using seven `add_3` blocks |
+| `Repeated_sequentially_counter_1_6` | Repeating 1-to-6 generator used by the electronic dice |
 | `simple_prescaler` | Generates slow (~0.5 Hz) and fast (~3 Hz) blink signals from 12 MHz clock |
 | `pulse_stretcher` | Extends a short pulse to a configurable duration (default: ~1 second) |
 | `seven_segment_display_0_F` | Combinational 7-segment decoder for hex digits 0–F (reusable wrapper around D-100.8 logic) |
@@ -186,4 +244,4 @@ apio sim      # Run simulation (requires testbench)
 - **Board:** Nandland Go Board (Lattice iCE40 HX1K)
 - **Clock:** 25 MHz onboard oscillator
 - **Inputs used:** SW1, SW2, SW3, SW4
-- **Outputs used:** LED1, LED2, LED3, Segment1, Segment2 (7-segment displays)
+- **Outputs used:** LED1, LED2, LED3, Segment1, Segment2 (7-segment displays), PMOD1, PMOD2, PMOD3, PMOD4, PMOD7, PMOD8, PMOD9
