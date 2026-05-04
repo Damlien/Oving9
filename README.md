@@ -158,22 +158,23 @@ Sequential counter that counts from 0 to 99 on each press of SW1. The value is s
 
 **Files:** `D_100_16_Numbergenerator_counter_1_6.v`, `lib_modules/Repeated_sequentially_counter_1_6.v`
 
-Sequential number generator for the electronic dice task. The reusable generator itself is separated from the top-level test circuit used to show the sequence on a 7-segment display.
+This task implements the number generator part of the electronic dice. The circuit uses SW1 as a hold-to-run control: while SW1 is held down, the number advances through 1, 2, 3, 4, 5, 6; when SW1 is released, the current number freezes. The generated number is then shown on one 7-segment display so the generator can be tested before it is connected to the dice LED decoder.
 
-`lib_modules/Repeated_sequentially_counter_1_6.v` is the stripped reusable module:
+`D_100_16_Numbergenerator_counter_1_6.v` is the full standalone test script:
+
+- It receives the physical input `SW1` and the board `clk`.
+- `SW1` is passed through `debouncer`, producing `clean_SW1`.
+- When `clean_SW1=1`, an internal clock-cycle counter runs. When it reaches `12_000_000`, the state `D_now` advances to the next number.
+- When `clean_SW1=0`, the counter stops and `D_now` holds its current value.
+- The sequence is `001 → 010 → 011 → 100 → 101 → 110 → 001`, representing decimal 1 through 6.
+- `D_now` is connected to `seven_segment_display_0_F` with `D3` hardwired to `0`, so the generated values can be tested on the Go Board 7-segment display.
+
+`lib_modules/Repeated_sequentially_counter_1_6.v` is the stripped reusable version of the same generator behavior:
 
 - Inputs are `clean_button` and `clk`; output is the 3-bit state `D_now[2:0]`.
 - It expects `clean_button` to already be debounced by the module that uses it.
-- When `clean_button=1`, an internal clock-cycle counter runs. When it reaches `12_000_000`, `D_now` advances to the next number.
-- When `clean_button=0`, the generator stops and holds the current value.
-- The sequence is `001 → 010 → 011 → 100 → 101 → 110 → 001`, representing decimal 1 through 6.
-
-`D_100_16_Numbergenerator_counter_1_6.v` is the full top-level test script:
-
-- It receives the physical input `SW1` and the board `clk`.
-- `SW1` is passed through `debouncer` to create the clean button signal used by the generator behavior.
-- The current number is connected to `seven_segment_display_0_F` with `D3` hardwired to `0`, so the generated values 1–6 can be tested on the Go Board 7-segment display.
-- This file is mainly a standalone test/display version of the D-100.16 generator, while `Repeated_sequentially_counter_1_6` is the module reused by the electronic dice top level.
+- It does not contain the physical `SW1` input, the debouncer, or the 7-segment display wiring.
+- This reusable module is used by the electronic dice top level in D-100.17/D-100.18.
 
 ---
 
