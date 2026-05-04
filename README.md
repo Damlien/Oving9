@@ -158,7 +158,9 @@ Sequential counter that counts from 0 to 99 on each press of SW1. The value is s
 
 **Files:** `D_100_16_Numbergenerator_counter_1_6.v`, `lib_modules/Repeated_sequentially_counter_1_6.v`
 
-This task implements the number generator part of the electronic dice. The circuit uses SW1 as a hold-to-run control: while SW1 is held down, the number advances through 1, 2, 3, 4, 5, 6; when SW1 is released, the current number freezes. The generated number is then shown on one 7-segment display so the generator can be tested before it is connected to the dice LED decoder.
+The purpose of this task is to make the "rolling" part of an electronic dice. A normal dice roll changes rapidly while it is being shaken and then stops on one value. Here, SW1 plays that role: holding SW1 down makes the circuit run quickly through the dice values 1 to 6, and releasing SW1 freezes the current value. The result is not random yet, but because the sequence runs continuously while the button is held, the stopped value depends on exactly when the button is released.
+
+This file is also used as a test version of the number generator. Instead of sending the value directly to the dice LEDs, it sends the generated number to a 7-segment display. That makes it easy to verify that the generator actually cycles through 1, 2, 3, 4, 5, and 6, and that it stops when SW1 is released.
 
 `D_100_16_Numbergenerator_counter_1_6.v` is the full standalone test script:
 
