@@ -65,6 +65,282 @@ The seven-segment displays on the Go Board are **active-low**: a segment turns O
 
 ---
 
+<!-- LOGIC_DOCS_START -->
+## Truth Tables And Karnaugh Maps
+
+The tables below document the Boolean-expression modules in the project. Karnaugh maps use Gray-code ordering on both axes, and the colored boxes show the product terms used in the Verilog equations. The SVG files are generated into `docs/assets/kmaps/` and embedded here so they render cleanly on GitHub.
+
+<details>
+<summary>D-100.6 Edge Detectors</summary>
+
+The edge detector outputs are one-clock pulses derived from the current button value and the previous sampled value.
+
+**Truth table**
+
+| button | prev | pos_edge | neg_edge | any_edge |
+| --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 1 | 1 |
+| 1 | 0 | 1 | 0 | 1 |
+| 1 | 1 | 0 | 0 | 0 |
+
+**Karnaugh maps**
+
+![D-100.6 Edge Detectors pos_edge K-map](docs/assets/kmaps/d100_6_edge_detectors_pos_edge.svg)
+
+![D-100.6 Edge Detectors neg_edge K-map](docs/assets/kmaps/d100_6_edge_detectors_neg_edge.svg)
+
+![D-100.6 Edge Detectors any_edge K-map](docs/assets/kmaps/d100_6_edge_detectors_any_edge.svg)
+
+</details>
+
+<details>
+<summary>D-100.7 SR Latch Control Logic</summary>
+
+This documents the Boolean logic around the D flip-flop in the SR latch task.
+
+**Truth table**
+
+| pos_SW1 | pos_SW2 | LED1 | LED2_Ctrl | LED1_next |
+| --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 0 | 1 |
+| 0 | 1 | 0 | 1 | 1 |
+| 0 | 1 | 1 | 1 | 1 |
+| 1 | 0 | 0 | 1 | 0 |
+| 1 | 0 | 1 | 1 | 0 |
+| 1 | 1 | 0 | 1 | 1 |
+| 1 | 1 | 1 | 1 | 1 |
+
+**Karnaugh maps**
+
+![D-100.7 SR Latch Control Logic LED2_Ctrl K-map](docs/assets/kmaps/d100_7_sr_latch_control_led2_ctrl.svg)
+
+![D-100.7 SR Latch Control Logic LED1_next K-map](docs/assets/kmaps/d100_7_sr_latch_control_led1_next.svg)
+
+</details>
+
+<details>
+<summary>D-100.8 Seven-Segment Decoder</summary>
+
+The Go Board display is active-low, so these maps show the logical condition for a segment to be lit. The Verilog outputs invert these expressions with `~(...)`.
+
+**Truth table**
+
+| D3 | D2 | D1 | D0 | A_on | B_on | C_on | D_on | E_on | F_on | G_on |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 0 |
+| 0 | 0 | 0 | 1 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 0 | 1 | 1 | 0 | 1 | 1 | 0 | 1 |
+| 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 1 |
+| 0 | 1 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 |
+| 0 | 1 | 0 | 1 | 1 | 0 | 1 | 1 | 0 | 1 | 1 |
+| 0 | 1 | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 1 | 1 |
+| 0 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 |
+| 1 | 0 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+| 1 | 0 | 0 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | 1 |
+| 1 | 0 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 | 1 |
+| 1 | 0 | 1 | 1 | 0 | 0 | 1 | 1 | 1 | 1 | 1 |
+| 1 | 1 | 0 | 0 | 1 | 0 | 0 | 1 | 1 | 1 | 0 |
+| 1 | 1 | 0 | 1 | 0 | 1 | 1 | 1 | 1 | 0 | 1 |
+| 1 | 1 | 1 | 0 | 1 | 0 | 0 | 1 | 1 | 1 | 1 |
+| 1 | 1 | 1 | 1 | 1 | 0 | 0 | 0 | 1 | 1 | 1 |
+
+**Karnaugh maps**
+
+![D-100.8 Seven-Segment Decoder A_on K-map](docs/assets/kmaps/d100_8_seven_segment_a_on.svg)
+
+![D-100.8 Seven-Segment Decoder B_on K-map](docs/assets/kmaps/d100_8_seven_segment_b_on.svg)
+
+![D-100.8 Seven-Segment Decoder C_on K-map](docs/assets/kmaps/d100_8_seven_segment_c_on.svg)
+
+![D-100.8 Seven-Segment Decoder D_on K-map](docs/assets/kmaps/d100_8_seven_segment_d_on.svg)
+
+![D-100.8 Seven-Segment Decoder E_on K-map](docs/assets/kmaps/d100_8_seven_segment_e_on.svg)
+
+![D-100.8 Seven-Segment Decoder F_on K-map](docs/assets/kmaps/d100_8_seven_segment_f_on.svg)
+
+![D-100.8 Seven-Segment Decoder G_on K-map](docs/assets/kmaps/d100_8_seven_segment_g_on.svg)
+
+</details>
+
+<details>
+<summary>D-100.9 Counter 4 to 1</summary>
+
+The truth table includes all 3-bit states; invalid states are shown according to the written equations.
+
+**Truth table**
+
+| D2 | D1 | D0 | D2_next | D1_next | D0_next |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 1 | 0 | 0 |
+| 0 | 1 | 0 | 0 | 0 | 1 |
+| 0 | 1 | 1 | 0 | 1 | 0 |
+| 1 | 0 | 0 | 0 | 1 | 1 |
+| 1 | 0 | 1 | 0 | 0 | 0 |
+| 1 | 1 | 0 | 0 | 0 | 0 |
+| 1 | 1 | 1 | 0 | 0 | 0 |
+
+**Karnaugh maps**
+
+![D-100.9 Counter 4 to 1 D2_next K-map](docs/assets/kmaps/d100_9_counter_4_1_d2_next.svg)
+
+![D-100.9 Counter 4 to 1 D1_next K-map](docs/assets/kmaps/d100_9_counter_4_1_d1_next.svg)
+
+![D-100.9 Counter 4 to 1 D0_next K-map](docs/assets/kmaps/d100_9_counter_4_1_d0_next.svg)
+
+</details>
+
+<details>
+<summary>D-100.10 Counter Up/Down</summary>
+
+These maps document the three next-state equations for the 1-to-4 up/down counter. The table includes all bit combinations; unused states are shown according to the written equations.
+
+**Truth table**
+
+| D2 | D1 | D0 | X | D2_next | D1_next | D0_next |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 0 | 1 | 0 | 0 |
+| 0 | 0 | 1 | 1 | 0 | 1 | 0 |
+| 0 | 1 | 0 | 0 | 0 | 0 | 1 |
+| 0 | 1 | 0 | 1 | 0 | 1 | 1 |
+| 0 | 1 | 1 | 0 | 0 | 1 | 0 |
+| 0 | 1 | 1 | 1 | 1 | 0 | 0 |
+| 1 | 0 | 0 | 0 | 0 | 1 | 1 |
+| 1 | 0 | 0 | 1 | 0 | 0 | 1 |
+| 1 | 0 | 1 | 0 | 0 | 0 | 0 |
+| 1 | 0 | 1 | 1 | 0 | 0 | 0 |
+| 1 | 1 | 0 | 0 | 0 | 0 | 0 |
+| 1 | 1 | 0 | 1 | 0 | 0 | 0 |
+| 1 | 1 | 1 | 0 | 0 | 0 | 0 |
+| 1 | 1 | 1 | 1 | 0 | 0 | 0 |
+
+**Karnaugh maps**
+
+![D-100.10 Counter Up/Down D2_next K-map](docs/assets/kmaps/d100_10_counter_up_down_d2_next.svg)
+
+![D-100.10 Counter Up/Down D1_next K-map](docs/assets/kmaps/d100_10_counter_up_down_d1_next.svg)
+
+![D-100.10 Counter Up/Down D0_next K-map](docs/assets/kmaps/d100_10_counter_up_down_d0_next.svg)
+
+</details>
+
+<details>
+<summary>D-100.11 Letter Counter A-F</summary>
+
+These maps document the lower three next-state bits for the A-F up/down counter. The table includes all lower-bit combinations; states outside A-F are shown according to the written equations.
+
+**Truth table**
+
+| D2 | D1 | D0 | X | D2_next | D1_next | D0_next |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 1 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 0 | 0 | 1 | 1 |
+| 0 | 1 | 0 | 1 | 1 | 1 | 1 |
+| 0 | 1 | 1 | 0 | 1 | 0 | 0 |
+| 0 | 1 | 1 | 1 | 0 | 1 | 0 |
+| 1 | 0 | 0 | 0 | 1 | 0 | 1 |
+| 1 | 0 | 0 | 1 | 0 | 1 | 1 |
+| 1 | 0 | 1 | 0 | 1 | 1 | 0 |
+| 1 | 0 | 1 | 1 | 1 | 0 | 0 |
+| 1 | 1 | 0 | 0 | 1 | 1 | 1 |
+| 1 | 1 | 0 | 1 | 1 | 0 | 1 |
+| 1 | 1 | 1 | 0 | 0 | 1 | 0 |
+| 1 | 1 | 1 | 1 | 1 | 1 | 0 |
+
+**Karnaugh maps**
+
+![D-100.11 Letter Counter A-F D2_next K-map](docs/assets/kmaps/d100_11_letter_counter_d2_next.svg)
+
+![D-100.11 Letter Counter A-F D1_next K-map](docs/assets/kmaps/d100_11_letter_counter_d1_next.svg)
+
+![D-100.11 Letter Counter A-F D0_next K-map](docs/assets/kmaps/d100_11_letter_counter_d0_next.svg)
+
+</details>
+
+<details>
+<summary>D-100.12 add_3 Correction Block</summary>
+
+`add_3` passes values 0-4 through unchanged and maps 5-9 to value+3 for the C-add-3 BCD converter.
+
+**Truth table**
+
+| A3 | A2 | A1 | A0 | S3 | S2 | S1 | S0 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 |
+| 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 |
+| 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 |
+| 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
+| 0 | 1 | 0 | 1 | 1 | 0 | 0 | 0 |
+| 0 | 1 | 1 | 0 | 1 | 0 | 0 | 1 |
+| 0 | 1 | 1 | 1 | 1 | 0 | 1 | 0 |
+| 1 | 0 | 0 | 0 | 1 | 0 | 1 | 1 |
+| 1 | 0 | 0 | 1 | 1 | 1 | 0 | 0 |
+| 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
+| 1 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
+| 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 1 | 1 | 0 | 1 | 0 | 0 | 0 | 0 |
+| 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
+| 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 |
+
+**Karnaugh maps**
+
+![D-100.12 add_3 Correction Block S3 K-map](docs/assets/kmaps/d100_12_add_3_s3.svg)
+
+![D-100.12 add_3 Correction Block S2 K-map](docs/assets/kmaps/d100_12_add_3_s2.svg)
+
+![D-100.12 add_3 Correction Block S1 K-map](docs/assets/kmaps/d100_12_add_3_s1.svg)
+
+![D-100.12 add_3 Correction Block S0 K-map](docs/assets/kmaps/d100_12_add_3_s0.svg)
+
+</details>
+
+<details>
+<summary>D-100.17 Dice LED Decoder</summary>
+
+The decoder maps binary values 001-110 to the seven LED positions of a dice face. The unused 000 and 111 rows are included so the table fully matches the written Boolean equations.
+
+**Truth table**
+
+| D2 | D1 | D0 | L0_PMOD1 | L1_PMOD2 | L2_PMOD3 | L3_PMOD4 | L4_PMOD7 | L5_PMOD8 | L6_PMOD9 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 |
+| 0 | 1 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | 0 |
+| 0 | 1 | 1 | 0 | 0 | 1 | 1 | 1 | 0 | 0 |
+| 1 | 0 | 0 | 1 | 0 | 1 | 0 | 1 | 0 | 1 |
+| 1 | 0 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 |
+| 1 | 1 | 0 | 1 | 1 | 1 | 0 | 1 | 1 | 1 |
+| 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+
+**Karnaugh maps**
+
+![D-100.17 Dice LED Decoder L0_PMOD1 K-map](docs/assets/kmaps/d100_17_dice_decoder_l0_pmod1.svg)
+
+![D-100.17 Dice LED Decoder L1_PMOD2 K-map](docs/assets/kmaps/d100_17_dice_decoder_l1_pmod2.svg)
+
+![D-100.17 Dice LED Decoder L2_PMOD3 K-map](docs/assets/kmaps/d100_17_dice_decoder_l2_pmod3.svg)
+
+![D-100.17 Dice LED Decoder L3_PMOD4 K-map](docs/assets/kmaps/d100_17_dice_decoder_l3_pmod4.svg)
+
+![D-100.17 Dice LED Decoder L4_PMOD7 K-map](docs/assets/kmaps/d100_17_dice_decoder_l4_pmod7.svg)
+
+![D-100.17 Dice LED Decoder L5_PMOD8 K-map](docs/assets/kmaps/d100_17_dice_decoder_l5_pmod8.svg)
+
+![D-100.17 Dice LED Decoder L6_PMOD9 K-map](docs/assets/kmaps/d100_17_dice_decoder_l6_pmod9.svg)
+
+</details>
+<!-- LOGIC_DOCS_END -->
+
+---
+
 ## Implemented Tasks
 
 ### D-100.6 – Edge Detectors
