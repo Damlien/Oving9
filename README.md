@@ -310,8 +310,8 @@ A standard physical dice has seven LED positions arranged in a fixed grid. By ov
 
 ```
 L0    L4
-L1    L5
-L2 L3 L6
+L1 L3 L5
+L2    L6
 ```
 
 A truth table was written for all six inputs (001–110), listing which LEDs are on for each dice face. Karnaugh maps over D2, D1, D0 were used to minimize each LED expression:
