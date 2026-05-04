@@ -397,35 +397,6 @@ MODULES = [
         ],
     },
     {
-        "id": "D-100.12",
-        "slug": "d100_12_add_3",
-        "title": "D-100.12 add_3 Correction Block",
-        "vars": ["A3", "A2", "A1", "A0"],
-        "note": "For 1010-1111, the module default returns 0000.",
-        "description": "`add_3` passes values 0-4 through unchanged and maps 5-9 to value+3 for the C-add-3 BCD converter.",
-        "outputs": [
-            ("S3", bit_from(add3_value, 3), [
-                term("~A3 & A2 & A0", A3=0, A2=1, A0=1),
-                term("~A3 & A2 & A1", A3=0, A2=1, A1=1),
-                term("A3 & ~A2 & ~A1", A3=1, A2=0, A1=0),
-            ]),
-            ("S2", bit_from(add3_value, 2), [
-                term("~A3 & A2 & ~A1 & ~A0", A3=0, A2=1, A1=0, A0=0),
-                term("A3 & ~A2 & ~A1 & A0", A3=1, A2=0, A1=0, A0=1),
-            ]),
-            ("S1", bit_from(add3_value, 1), [
-                term("~A3 & ~A2 & A1", A3=0, A2=0, A1=1),
-                term("~A3 & A2 & A1 & A0", A3=0, A2=1, A1=1, A0=1),
-                term("A3 & ~A2 & ~A1 & ~A0", A3=1, A2=0, A1=0, A0=0),
-            ]),
-            ("S0", bit_from(add3_value, 0), [
-                term("~A3 & ~A2 & A0", A3=0, A2=0, A0=1),
-                term("~A3 & A2 & A1 & ~A0", A3=0, A2=1, A1=1, A0=0),
-                term("A3 & ~A2 & ~A1 & ~A0", A3=1, A2=0, A1=0, A0=0),
-            ]),
-        ],
-    },
-    {
         "id": "D-100.17",
         "slug": "d100_17_dice_decoder",
         "title": "D-100.17 Dice LED Decoder",

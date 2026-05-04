@@ -265,44 +265,6 @@ These maps document the lower three next-state bits for the A-F up/down counter.
 </details>
 
 <details>
-<summary>D-100.12 add_3 Correction Block</summary>
-
-`add_3` passes values 0-4 through unchanged and maps 5-9 to value+3 for the C-add-3 BCD converter.
-
-**Truth table**
-
-| A3 | A2 | A1 | A0 | S3 | S2 | S1 | S0 |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 0 | 0 | 0 | 1 | 0 | 0 | 0 | 1 |
-| 0 | 0 | 1 | 0 | 0 | 0 | 1 | 0 |
-| 0 | 0 | 1 | 1 | 0 | 0 | 1 | 1 |
-| 0 | 1 | 0 | 0 | 0 | 1 | 0 | 0 |
-| 0 | 1 | 0 | 1 | 1 | 0 | 0 | 0 |
-| 0 | 1 | 1 | 0 | 1 | 0 | 0 | 1 |
-| 0 | 1 | 1 | 1 | 1 | 0 | 1 | 0 |
-| 1 | 0 | 0 | 0 | 1 | 0 | 1 | 1 |
-| 1 | 0 | 0 | 1 | 1 | 1 | 0 | 0 |
-| 1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 |
-| 1 | 0 | 1 | 1 | 0 | 0 | 0 | 0 |
-| 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 |
-| 1 | 1 | 0 | 1 | 0 | 0 | 0 | 0 |
-| 1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 |
-| 1 | 1 | 1 | 1 | 0 | 0 | 0 | 0 |
-
-**Karnaugh maps**
-
-![D-100.12 add_3 Correction Block S3 K-map](docs/assets/kmaps/d100_12_add_3_s3.svg)
-
-![D-100.12 add_3 Correction Block S2 K-map](docs/assets/kmaps/d100_12_add_3_s2.svg)
-
-![D-100.12 add_3 Correction Block S1 K-map](docs/assets/kmaps/d100_12_add_3_s1.svg)
-
-![D-100.12 add_3 Correction Block S0 K-map](docs/assets/kmaps/d100_12_add_3_s0.svg)
-
-</details>
-
-<details>
 <summary>D-100.17 Dice LED Decoder</summary>
 
 The decoder maps binary values 001-110 to the seven LED positions of a dice face. The unused 000 and 111 rows are included so the table fully matches the written Boolean equations.
